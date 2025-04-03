@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  Button,
   AppBar,
   Box,
   Toolbar,
@@ -30,6 +31,7 @@ import {
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../features/themeSlice";
+import { useEffect } from "react";
 
 const pages = [
   { title: "Home", icon: <HomeIcon />, path: "/" },
@@ -45,10 +47,19 @@ const settings = [
 ];
 
 function Navbar() {
+  console.log("Navbar Rendered");
+
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dispatch = useDispatch();
   const isDarkTheme = useSelector((state) => state.theme.isDarkTheme);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const authState = useSelector((state) => state.auth);
+  console.log("Auth State:", authState);
+
+  useEffect(() => {
+    console.log("Auth status changed:", isAuthenticated);
+  }, [isAuthenticated]);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -280,51 +291,81 @@ function Navbar() {
           </IconButton>
 
           {/* User Menu */}
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="User" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem
-                  key={setting.title}
-                  onClick={handleCloseUserMenu}
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            {!isAuthenticated ? (
+              <>
+                <Button
+                  href="/login"
+                  variant="outlined"
                   sx={{
-                    color: isDarkTheme ? "#ffffff" : "#212121",
-                    "&:hover": {
-                      backgroundColor: isDarkTheme ? "#2c2c2c" : "#f5f5f5",
-                    },
+                    color: isDarkTheme ? "#fff" : "#007bff",
+                    borderColor: isDarkTheme ? "#fff" : "#007bff",
+                    "&:hover": { backgroundColor: "#007bff", color: "#fff" },
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      color: isDarkTheme ? "#ffffff" : "#212121",
-                      minWidth: "40px",
-                    }}
-                  >
-                    {setting.icon}
-                  </ListItemIcon>
-                  <Typography textAlign="center">{setting.title}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+                  Log In
+                </Button>
+                <Button
+                  href="/signup"
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#007bff",
+                    "&:hover": { backgroundColor: "#0056b3" },
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </>
+            ) : (
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt="User" src="/static/images/avatar/2.jpg" />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem
+                      key={setting.title}
+                      onClick={handleCloseUserMenu}
+                      sx={{
+                        color: isDarkTheme ? "#ffffff" : "#212121",
+                        "&:hover": {
+                          backgroundColor: isDarkTheme ? "#2c2c2c" : "#f5f5f5",
+                        },
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          color: isDarkTheme ? "#ffffff" : "#212121",
+                          minWidth: "40px",
+                        }}
+                      >
+                        {setting.icon}
+                      </ListItemIcon>
+                      <Typography textAlign="center">
+                        {setting.title}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            )}
           </Box>
         </Toolbar>
       </Container>

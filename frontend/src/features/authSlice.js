@@ -63,7 +63,7 @@ const authSlice = createSlice({
     error: null,
     userFromUpdate: null,
     loading: null,
-    isAthenticated: null,
+    isAuthenticated: null,
     token: null,
   },
   reducers: {},
@@ -75,7 +75,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.isAthenticated = true;
+        state.isAuthenticated = true;
         state.user = action.payload.user;
         state.token = action.payload.token;
         localStorage.setItem("userInfo", JSON.stringify(action.payload));
@@ -90,7 +90,7 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.isAthenticated = true;
+        state.isAuthenticated = true;
         console.log("full payload : " + action.payload);
         console.log(action.payload.token);
 

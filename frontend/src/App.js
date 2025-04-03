@@ -33,27 +33,27 @@ function AppContent() {
   }, [dispatch]);
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
-          backgroundColor: isDarkTheme ? "#121212" : "#f8fafc",
-          color: isDarkTheme ? "#ffffff" : "#212121",
-        }}
-      >
-        <Navbar />
+    <Router>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
         <Box
-          component="main"
           sx={{
-            flexGrow: 1,
-            py: 3,
-            px: { xs: 2, md: 3 },
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+            backgroundColor: isDarkTheme ? "#121212" : "#f8fafc",
+            color: isDarkTheme ? "#ffffff" : "#212121",
           }}
         >
-          <Router>
+          <Navbar />
+          <Box
+            component="main"
+            sx={{
+              flexGrow: 1,
+              py: 3,
+              px: { xs: 2, md: 3 },
+            }}
+          >
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
@@ -62,11 +62,11 @@ function AppContent() {
               {/* routing to Ai roadmap from nav link */}
               <Route path="/ai-roadmap" element={<AiRoadmap />} />
             </Routes>
-          </Router>
+          </Box>
+          <Footer />
         </Box>
-        <Footer />
-      </Box>
-    </MuiThemeProvider>
+      </MuiThemeProvider>
+    </Router>
   );
 }
 
