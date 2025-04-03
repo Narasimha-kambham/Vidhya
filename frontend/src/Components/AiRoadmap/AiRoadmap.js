@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from "react";
 import {
   Box,
   Container,
@@ -8,17 +7,12 @@ import {
   MenuItem,
   Button,
   Paper,
-  Stepper,
-  Step,
-  StepLabel,
   Card,
   CardContent,
-  Grid,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Divider,
   useTheme,
   CircularProgress,
   Alert,
@@ -31,90 +25,32 @@ import {
   TimelineContent,
   TimelineDot,
 } from "@mui/lab";
-import {
-  CheckCircle as CheckCircleIcon,
-  RadioButtonUnchecked as RadioButtonUncheckedIcon,
-} from "@mui/icons-material";
-import { useSelector } from "react-redux";
+import { RadioButtonUnchecked as RadioButtonUncheckedIcon } from "@mui/icons-material";
+import { useSelector, useDispatch } from "react-redux";
 import { motion } from "framer-motion";
+import { updateFormData, fetchRoadmap } from "../../features/roadmapSlice";
 
 const AiRoadmap = () => {
   const theme = useTheme();
-  const isDarkTheme = useSelector((state) => state.theme.isDarkTheme);
-  const [formData, setFormData] = useState({
-    subject: "",
-    timeSpan: "",
-    skillLevel: "",
-    timeCommitment: "",
-    learningGoal: "",
-  });
-  const [roadmapData, setRoadmapData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+
+  const { formData, roadmapData, loading, error } = useSelector(
+    (state) => state.roadmap
+  );
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    dispatch(updateFormData({ [name]: value }));
   };
-  //sending form data to backend
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      // console.log("Sending request with data:", formData);
-
-      //goto api/ai/generate link (in server) in backend and form data is sent in format :
-      //{
-      //  "subject": "Python",
-      //  "timeSpan": "1 month",
-      //  "skillLevel": "Beginner",
-      //  "timeCommitment": "2 hours/day",
-      //  "learningGoal": "Get a job"
-      //}
-
-      const response = await axios.post(
-        "http://localhost:5000/api/ai/generate",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // console.log("Received response:", response.data);
-      //received response
-
-      if (response.data && response.data.learning_plan) {
-        setRoadmapData(response.data);
-      } else {
-        console.error("Invalid response format:", response.data);
-        setError("Invalid response format from server");
-      }
-    } catch (error) {
-      console.error("Error details:", error.response?.data || error.message);
-      setError(
-        error.response?.data?.error ||
-          error.response?.data?.details ||
-          error.message ||
-          "Failed to generate roadmap. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
+    dispatch(fetchRoadmap(formData));
   };
 
+  // Animation variants for roadmap cards
   const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 50,
-      scale: 0.95,
-    },
+    hidden: { opacity: 0, y: 20, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
@@ -210,8 +146,8 @@ const AiRoadmap = () => {
               <TextField
                 fullWidth
                 label="Time Span"
-                name="timeSpan"
-                value={formData.timeSpan}
+                name="time_span"
+                value={formData.time_span}
                 onChange={handleChange}
                 select
                 required
@@ -242,8 +178,8 @@ const AiRoadmap = () => {
               <TextField
                 fullWidth
                 label="Skill Level"
-                name="skillLevel"
-                value={formData.skillLevel}
+                name="skill_level"
+                value={formData.skill_level}
                 onChange={handleChange}
                 select
                 required
@@ -273,9 +209,9 @@ const AiRoadmap = () => {
 
               <TextField
                 fullWidth
-                label="Daily/Weekly Time Commitment"
-                name="timeCommitment"
-                value={formData.timeCommitment}
+                label="Learning Goal"
+                name="goal"
+                value={formData.goal}
                 onChange={handleChange}
                 select
                 required
@@ -298,43 +234,11 @@ const AiRoadmap = () => {
                   },
                 }}
               >
-                <MenuItem value="2 hours/day">2 Hours/Day</MenuItem>
-                <MenuItem value="4 hours/day">4 Hours/Day</MenuItem>
-                <MenuItem value="10 hours/week">10 Hours/Week</MenuItem>
+                <MenuItem value="Get a job">Get a Job</MenuItem>
+                <MenuItem value="Build a project">Build a Project</MenuItem>
+                <MenuItem value="Pass an exam">Pass an Exam</MenuItem>
               </TextField>
             </Box>
-
-            <TextField
-              fullWidth
-              label="Learning Goal"
-              name="learningGoal"
-              value={formData.learningGoal}
-              onChange={handleChange}
-              select
-              required
-              size="large"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  color: theme.palette.text.primary,
-                  height: "56px",
-                  fontSize: "1.1rem",
-                },
-                "& .MuiInputLabel-root": {
-                  color: theme.palette.text.primary,
-                  fontSize: "1.1rem",
-                  "&.Mui-focused": {
-                    color: theme.palette.primary.main,
-                  },
-                },
-                "& .MuiSelect-select": {
-                  padding: "16px 14px",
-                },
-              }}
-            >
-              <MenuItem value="Get a job">Get a Job</MenuItem>
-              <MenuItem value="Build a project">Build a Project</MenuItem>
-              <MenuItem value="Pass an exam">Pass an Exam</MenuItem>
-            </TextField>
 
             <Button
               type="submit"
@@ -370,7 +274,7 @@ const AiRoadmap = () => {
       )}
 
       {/* Roadmap Display Section */}
-      {roadmapData && (
+      {roadmapData && roadmapData.learning_plan && (
         <Paper
           elevation={3}
           sx={{
@@ -436,24 +340,25 @@ const AiRoadmap = () => {
                           Week {week.week}: {week.topic}
                         </Typography>
                         <List>
-                          {week.details.map((detail, idx) => (
-                            <ListItem key={idx}>
-                              <ListItemIcon>
-                                <RadioButtonUncheckedIcon
+                          {week.details &&
+                            week.details.map((detail, idx) => (
+                              <ListItem key={idx}>
+                                <ListItemIcon>
+                                  <RadioButtonUncheckedIcon
+                                    sx={{
+                                      color: theme.palette.text.primary,
+                                      fontSize: "1.2rem",
+                                    }}
+                                  />
+                                </ListItemIcon>
+                                <ListItemText
+                                  primary={detail}
                                   sx={{
                                     color: theme.palette.text.primary,
-                                    fontSize: "1.2rem",
                                   }}
                                 />
-                              </ListItemIcon>
-                              <ListItemText
-                                primary={detail}
-                                sx={{
-                                  color: theme.palette.text.primary,
-                                }}
-                              />
-                            </ListItem>
-                          ))}
+                              </ListItem>
+                            ))}
                         </List>
                       </CardContent>
                     </Card>
