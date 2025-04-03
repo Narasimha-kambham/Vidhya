@@ -16,6 +16,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import store from "./store";
 import { setTheme } from "./features/themeSlice";
 import AiRoadmap from "./Components/AiRoadmap/AiRoadmap";
+import Login from "./Components/Auth/Login";
+import Signup from "./Components/Auth/Signup";
 
 function AppContent() {
   const isDarkTheme = useSelector((state) => state.theme.isDarkTheme);
@@ -54,6 +56,9 @@ function AppContent() {
           <Router>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               {/* routing to Ai roadmap from nav link */}
               <Route path="/ai-roadmap" element={<AiRoadmap />} />
             </Routes>
