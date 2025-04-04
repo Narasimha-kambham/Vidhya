@@ -13,11 +13,13 @@ import Footer from "./layout/Footer";
 import Home from "./Components/Home/Home";
 import { lightTheme, darkTheme } from "./theme/theme";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import store from "./store";
+import { store, persistor } from "./store"; // 🔥 Import store & persistor
+import { PersistGate } from "redux-persist/integration/react";
 import { setTheme } from "./features/themeSlice";
 import AiRoadmap from "./Components/AiRoadmap/AiRoadmap";
 import Login from "./Components/Auth/Login";
 import Signup from "./Components/Auth/Signup";
+import PrivateRoute from "./PrivateRoute";
 
 function AppContent() {
   const isDarkTheme = useSelector((state) => state.theme.isDarkTheme);
@@ -60,7 +62,14 @@ function AppContent() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               {/* routing to Ai roadmap from nav link */}
-              <Route path="/ai-roadmap" element={<AiRoadmap />} />
+              <Route
+                path="/ai-roadmap"
+                element={
+                  <PrivateRoute>
+                    <AiRoadmap />
+                  </PrivateRoute>
+                }
+              />
             </Routes>
           </Box>
           <Footer />
@@ -73,7 +82,9 @@ function AppContent() {
 function App() {
   return (
     <Provider store={store}>
-      <AppContent />
+      <PersistGate loading={null} persistor={persistor}>
+        <AppContent />
+      </PersistGate>
     </Provider>
   );
 }

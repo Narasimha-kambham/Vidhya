@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const roadmapRoutes = require("./routes/roadmapRoutes");
 const userRoutes = require("./routes/userRoutes");
 const connectDB = require("./config/db");
+const { protect } = require("./middleware/middleware");
 
 dotenv.config();
 

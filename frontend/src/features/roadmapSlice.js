@@ -4,7 +4,11 @@ import axios from "axios"; //  Import axios
 // Async thunk for generating roadmap
 export const fetchRoadmap = createAsyncThunk(
   "roadmap/fetchRoadmap",
-  async (formData, { rejectWithValue }) => {
+  async (formData, { getState, rejectWithValue }) => {
+    const state = getState();
+    console.log("Redux State:", state);
+    console.log("Token from Redux:", state.auth.token);
+    const token = state.auth.token;
     try {
       const response = await axios.post(
         "http://localhost:5000/api/ai/generate",
@@ -12,12 +16,16 @@ export const fetchRoadmap = createAsyncThunk(
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
+      console.log("getState().auth : " + getState().auth);
+
+      console.log("token: " + token);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );

@@ -31,7 +31,8 @@ import {
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../features/themeSlice";
-import { useEffect } from "react";
+import { logout } from "../features/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const pages = [
   { title: "Home", icon: <HomeIcon />, path: "/" },
@@ -43,23 +44,20 @@ const pages = [
 const settings = [
   { title: "Profile", icon: <PersonIcon />, path: "/profile" },
   { title: "Settings", icon: <SettingsIcon />, path: "/settings" },
-  { title: "Logout", icon: <LogoutIcon />, path: "/logout" },
+  { title: "Logout", icon: <LogoutIcon />, onClick: () => {} },
 ];
 
 function Navbar() {
-  console.log("Navbar Rendered");
+  //debugging Navbar Rendered : console.log("Navbar Rendered");
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isDarkTheme = useSelector((state) => state.theme.isDarkTheme);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const authState = useSelector((state) => state.auth);
-  console.log("Auth State:", authState);
 
-  useEffect(() => {
-    console.log("Auth status changed:", isAuthenticated);
-  }, [isAuthenticated]);
+  //debugging Auth State : console.log("Auth State:", authState);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -300,7 +298,10 @@ function Navbar() {
                   sx={{
                     color: isDarkTheme ? "#fff" : "#007bff",
                     borderColor: isDarkTheme ? "#fff" : "#007bff",
-                    "&:hover": { backgroundColor: "#007bff", color: "#fff" },
+                    "&:hover": {
+                      backgroundColor: "rgba(0, 123, 255,0.4)",
+                      color: "#fff",
+                    },
                   }}
                 >
                   Log In
@@ -310,7 +311,7 @@ function Navbar() {
                   variant="contained"
                   sx={{
                     backgroundColor: "#007bff",
-                    "&:hover": { backgroundColor: "#0056b3" },
+                    "&:hover": { backgroundColor: "#0056b3", color: "#fff" },
                   }}
                 >
                   Sign Up
@@ -342,7 +343,16 @@ function Navbar() {
                   {settings.map((setting) => (
                     <MenuItem
                       key={setting.title}
-                      onClick={handleCloseUserMenu}
+                      onClick={() => {
+                        if (setting.title === "Logout") {
+                          dispatch(logout());
+                          handleCloseUserMenu();
+                          navigate("/");
+                        } else {
+                          handleCloseUserMenu();
+                          navigate(setting.path);
+                        }
+                      }}
                       sx={{
                         color: isDarkTheme ? "#ffffff" : "#212121",
                         "&:hover": {
