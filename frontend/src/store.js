@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import themeReducer from "./features/themeSlice";
 import roadmapReducer from "./features/roadmapSlice";
 import authReducer from "./features/authSlice";
+import courseReducer from "./features/courseSlice";
 import storage from "redux-persist/lib/storage"; // 🔥 Local storage for persisting Redux state
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "redux";
@@ -16,7 +17,9 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authReducer,
   roadmap: roadmapReducer,
+  course: courseReducer,
   theme: themeReducer,
+
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

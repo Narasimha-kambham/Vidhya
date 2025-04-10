@@ -17,6 +17,7 @@ import { store, persistor } from "./store"; // 🔥 Import store & persistor
 import { PersistGate } from "redux-persist/integration/react";
 import { setTheme } from "./features/themeSlice";
 import AiRoadmap from "./Components/AiRoadmap/AiRoadmap";
+import Courses from "./Components/Courses/Courses";
 import Login from "./Components/Auth/Login";
 import Signup from "./Components/Auth/Signup";
 import PrivateRoute from "./PrivateRoute";
@@ -61,6 +62,13 @@ function AppContent() {
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route
+                path="/courses"
+                element={
+                  <PrivateRoute>
+                    <Courses />
+                  </PrivateRoute>
+                }/>
               {/* routing to Ai roadmap from nav link */}
               <Route
                 path="/ai-roadmap"
