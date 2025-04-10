@@ -18,6 +18,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { setTheme } from "./features/themeSlice";
 import AiRoadmap from "./Components/AiRoadmap/AiRoadmap";
 import Courses from "./Components/Courses/Courses";
+import Courseone from "./Components/Courses/Courseone";
 import Login from "./Components/Auth/Login";
 import Signup from "./Components/Auth/Signup";
 import PrivateRoute from "./PrivateRoute";
@@ -62,6 +63,13 @@ function AppContent() {
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route
+                path="/course/web-dev-course"
+                element={
+                  <PrivateRoute>
+                    <Courseone />
+                  </PrivateRoute>
+                } />
               <Route
                 path="/courses"
                 element={

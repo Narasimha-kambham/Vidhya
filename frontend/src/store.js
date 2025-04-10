@@ -3,6 +3,7 @@ import themeReducer from "./features/themeSlice";
 import roadmapReducer from "./features/roadmapSlice";
 import authReducer from "./features/authSlice";
 import courseReducer from "./features/courseSlice";
+import courseProgressReducer from "./features/courseProgressSlice";
 import storage from "redux-persist/lib/storage"; // 🔥 Local storage for persisting Redux state
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "redux";
@@ -11,7 +12,7 @@ import { combineReducers } from "redux";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "theme", "roadmap"], // Only persist auth state
+  whitelist: ["auth", "theme", "roadmap", "courseProgress"], // Persist these states
 };
 
 const rootReducer = combineReducers({
@@ -19,7 +20,7 @@ const rootReducer = combineReducers({
   roadmap: roadmapReducer,
   course: courseReducer,
   theme: themeReducer,
-
+  courseProgress: courseProgressReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
