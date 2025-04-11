@@ -360,6 +360,11 @@ const Courseone = () => {
                     <ListItemText
                       primary={lecture.title}
                       secondary={lecture.duration}
+                      sx={{
+                        '& .MuiTypography-root': {
+                          textDecoration: completedLectures.includes(`${index}-${lectureIndex}`) ? 'line-through' : 'none'
+                        }
+                      }}
                     />
                     <Checkbox
                       checked={completedLectures.includes(`${index}-${lectureIndex}`)}
