@@ -33,12 +33,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../features/themeSlice";
 import { logout } from "../features/authSlice";
 import { useNavigate } from "react-router-dom";
+import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
 
 const pages = [
   { title: "Home", icon: <HomeIcon />, path: "/" },
   { title: "Courses", icon: <BookIcon />, path: "/courses" },
   { title: "About", icon: <SchoolIcon />, path: "/about" },
   { title: "AI Roadmap", icon: <AutoGraphIcon />, path: "/ai-roadmap" },
+  { title: "Tools", icon: <HomeRepairServiceIcon/>, path: "/tools" },
 ];
 
 const settings = [

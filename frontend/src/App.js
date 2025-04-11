@@ -22,6 +22,8 @@ import Courseone from "./Components/Courses/Courseone";
 import Login from "./Components/Auth/Login";
 import Signup from "./Components/Auth/Signup";
 import PrivateRoute from "./PrivateRoute";
+import Aitools from './Components/Aitools/Aitools';
+
 
 function AppContent() {
   const isDarkTheme = useSelector((state) => state.theme.isDarkTheme);
@@ -85,7 +87,9 @@ function AppContent() {
                     <AiRoadmap />
                   </PrivateRoute>
                 }
+
               />
+              <Route path="/tools" element={<Aitools />} />
             </Routes>
           </Box>
           <Footer />
