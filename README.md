@@ -5,7 +5,7 @@ Here is your finalized `README.md` file for the **Vidhya - Personalized Learning
 ```markdown
 # Vidhya - Personalized Learning Platform
 
-![Vidhya Platform](path/to/your/logo.png)
+
 
 ## 🧠 Overview
 
