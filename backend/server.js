@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const roadmapRoutes = require("./routes/roadmapRoutes");
 const userRoutes = require("./routes/userRoutes");
 const courseRoutes = require("./routes/courseRoutes");
+const toolRoutes = require("./routes/toolRoutes");
 const connectDB = require("./config/db");
 const { protect } = require("./middleware/middleware");
 
@@ -24,6 +25,7 @@ connectDB();
 app.use("/api/ai", roadmapRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/tools", toolRoutes);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
