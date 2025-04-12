@@ -4,19 +4,32 @@ import { createSlice } from '@reduxjs/toolkit';
 const courseProgressSlice = createSlice({
   name: 'courseProgress',
   initialState: {
-    completedLectures: {},  // Store completed lectures by courseId
+    completedLectures: {},
   },
   reducers: {
     toggleLectureCompletion: (state, action) => {
       const { courseId, lectureId } = action.payload;
+      
+      // Ensure the array exists
       if (!state.completedLectures[courseId]) {
-        state.completedLectures[courseId] = [];
+        state.completedLectures = {
+          ...state.completedLectures,
+          [courseId]: []
+        };
       }
-      const index = state.completedLectures[courseId].indexOf(lectureId);
-      if (index === -1) {
-        state.completedLectures[courseId].push(lectureId);
+      
+      const isCompleted = state.completedLectures[courseId].includes(lectureId);
+      
+      if (!isCompleted) {
+        state.completedLectures = {
+          ...state.completedLectures,
+          [courseId]: [...state.completedLectures[courseId], lectureId]
+        };
       } else {
-        state.completedLectures[courseId].splice(index, 1);
+        state.completedLectures = {
+          ...state.completedLectures,
+          [courseId]: state.completedLectures[courseId].filter(id => id !== lectureId)
+        };
       }
     },
     clearCourseProgress: (state, action) => {
