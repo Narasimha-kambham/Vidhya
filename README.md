@@ -1,8 +1,3 @@
-Here is your finalized `README.md` file for the **Vidhya - Personalized Learning Platform**, ready to be saved or added to your project:
-
----
-
-```markdown
 # Vidhya - Personalized Learning Platform
 
 
@@ -143,8 +138,4 @@ Have questions or suggestions? Feel free to connect!
 ---
 
 > "Education is the most powerful weapon which you can use to change the world." — Nelson Mandela
-```
-
----
-
 
